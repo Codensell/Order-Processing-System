@@ -16,9 +16,7 @@ public class OrdersController : ControllerBase
     [HttpPost]
     public IActionResult CreateOrder([FromBody] CreateOrderRequest request)
     {
-        var service = new CreateOrderService();
-        var result = service.Execute(request);
-
+        var result = _createOrderService.Execute(request);
         return Ok(result);
     }
 }
