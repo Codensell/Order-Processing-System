@@ -8,6 +8,11 @@ namespace OrderProcessingSystem.API.Controllers;
 
 public class OrdersController : ControllerBase
 {
+    private readonly ICreateOrderService _createOrderService;
+    public OrdersController(ICreateOrderService createOrderService)
+    {
+        _createOrderService = createOrderService;
+    }
     [HttpPost]
     public IActionResult CreateOrder([FromBody] CreateOrderRequest request)
     {

@@ -2,7 +2,7 @@ using OrderProcessingSystem.Domain.Entities;
 
 namespace OrderProcessingSystem.Application.Orders.CreateOrder;
 
-public class CreateOrderService
+public class CreateOrderService : ICreateOrderService
 {
     public CreateOrderResponse Execute(CreateOrderRequest request)
     {
