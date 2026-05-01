@@ -4,30 +4,30 @@ namespace OrderProcessingSystem.Domain.Entities;
 
 public class Order
 {
-    public Guid Id {get; private set;}
-    public DateTime CreatedAt {get; private set;}
-    public OrderStatus Status {get; private set;}
+    public Guid Id { get; private set; }
+    public DateTime CreatedAt { get; private set; }
+    public OrderStatus Status { get; private set; }
 
     private readonly List<OrderItem> _items = [];
     public IReadOnlyCollection<OrderItem> Items => _items;
 
-    private Order(){}
+    private Order(Guid id, DateTime createdAt, OrderStatus status)
+    {
+        Id = id;
+        CreatedAt = createdAt;
+        Status = status;
+    }
 
     public static Order Create()
     {
-        return new Order
-        {
-            Id = Guid.NewGuid(),
-            CreatedAt = DateTime.UtcNow,
-            Status = OrderStatus.Created
-        };
+        return new Order(Guid.NewGuid(), DateTime.UtcNow, OrderStatus.Created);
     }
 
     public void AddItem(string productName, decimal price, int quantity)
     {
-        if(Status != OrderStatus.Created)
+        if (Status != OrderStatus.Created)
             throw new InvalidOperationException("Cannot modify order");
-        
+
         var item = new OrderItem(productName, price, quantity);
         _items.Add(item);
     }
@@ -35,16 +35,16 @@ public class Order
     {
         if (_items.Count == 0)
             throw new InvalidOperationException("Order must contain items");
-        if(Status != OrderStatus.Created)
+        if (Status != OrderStatus.Created)
             throw new InvalidOperationException("Order cannot be paid");
-        
+
         Status = OrderStatus.Paid;
     }
     public void Cancel()
     {
-        if(Status == OrderStatus.Paid)
+        if (Status == OrderStatus.Paid)
             throw new InvalidOperationException("Paid order cannot be cancelled");
-        
+
         Status = OrderStatus.Cancelled;
     }
 }
