@@ -13,6 +13,16 @@ public class Order
 
     private Order(){}
 
+    public static Order Create()
+    {
+        return new Order
+        {
+            Id = Guid.NewGuid(),
+            CreatedAt = DateTime.UtcNow,
+            Status = OrderStatus.Created
+        };
+    }
+
     public void AddItem(string productName, decimal price, int quantity)
     {
         if(Status != OrderStatus.Created)
