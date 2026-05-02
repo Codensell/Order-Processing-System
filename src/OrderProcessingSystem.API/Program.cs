@@ -2,6 +2,7 @@ using OrderProcessingSystem.Application.Orders.CreateOrder;
 using Microsoft.EntityFrameworkCore;
 using OrderProcessingSystem.Infrastructure.Data;
 using OrderProcessingSystem.Application.Orders;
+using OrderProcessingSystem.Application.Orders.GetOrderById;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,8 @@ builder.Services.AddScoped<ICreateOrderService, CreateOrderService>();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql("Host=localhost;Port=5432;Database=orders_db;Username=postgres;Password=postgres"));
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IGetOrderByIdService, GetOrderByIdService>();
+
 var app = builder.Build();
 
 app.UseHttpsRedirection();
