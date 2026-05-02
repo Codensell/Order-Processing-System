@@ -12,7 +12,9 @@ public class CreateOrderService : ICreateOrderService
         _repository = repository;
     }
 
-    public CreateOrderResponse Execute(CreateOrderRequest request)
+    public async Task<CreateOrderResponse> ExecuteAsync(
+        CreateOrderRequest request,
+        CancellationToken cancellationToken)
     {
         var order = Order.Create();
 
@@ -22,7 +24,7 @@ public class CreateOrderService : ICreateOrderService
         }
 
         _repository.Add(order);
-        _repository.SaveChanges();
+        await _repository.SaveChangesAsync(cancellationToken);
 
         return new CreateOrderResponse
         {

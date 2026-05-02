@@ -12,9 +12,11 @@ public class GetOrderByIdService : IGetOrderByIdService
         _repository = repository;
     }
 
-    public GetOrderByIdResponse? Execute(Guid id)
+    public async Task<GetOrderByIdResponse?> ExecuteAsync(
+        Guid id,
+        CancellationToken cancellationToken)
     {
-        var order = _repository.GetById(id);
+        var order = await _repository.GetByIdAsync(id, cancellationToken);
 
         if(order == null)
         {

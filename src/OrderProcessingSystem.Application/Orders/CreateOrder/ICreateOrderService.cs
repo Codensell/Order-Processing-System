@@ -1,5 +1,5 @@
 namespace OrderProcessingSystem.Application.Orders.CreateOrder;
 public interface ICreateOrderService
 {
-    CreateOrderResponse Execute(CreateOrderRequest request);
+    Task<CreateOrderResponse> ExecuteAsync(CreateOrderRequest request, CancellationToken cancellationToken);
 }

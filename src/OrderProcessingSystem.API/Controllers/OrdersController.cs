@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using OrderProcessingSystem.Application.Orders.CreateOrder;
 using OrderProcessingSystem.Application.Orders.GetOrderById;
@@ -18,16 +19,16 @@ public class OrdersController : ControllerBase
         _getOrderByIdService = getOrderByIdService;
     }
     [HttpPost]
-    public IActionResult CreateOrder([FromBody] CreateOrderRequest request)
+    public async Task<IActionResult> CreateOrder([FromBody] CreateOrderRequest request, CancellationToken cancellationToken)
     {
-        var result = _createOrderService.Execute(request);
+        var result = await _createOrderService.ExecuteAsync(request, cancellationToken);
         return Ok(result);
     }
 
     [HttpGet("{id:guid}")]
-    public IActionResult GetOrderById(Guid id)
+    public async Task<IActionResult> GetOrderById(Guid id, CancellationToken cancellationToken)
     {
-        var result = _getOrderByIdService.Execute(id);
+        var result = await _getOrderByIdService.ExecuteAsync(id, cancellationToken);
         if (result == null)
             return NotFound();
 

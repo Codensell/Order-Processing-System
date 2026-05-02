@@ -1,13 +1,12 @@
+using Microsoft.EntityFrameworkCore;
 using OrderProcessingSystem.Application.Orders;
 using OrderProcessingSystem.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 
 namespace OrderProcessingSystem.Infrastructure.Data;
 
 public class OrderRepository : IOrderRepository
 {
     private readonly AppDbContext _dbContext;
-
 
     public OrderRepository(AppDbContext dbContext)
     {
@@ -19,15 +18,15 @@ public class OrderRepository : IOrderRepository
         _dbContext.Orders.Add(order);
     }
 
-    public Order? GetById(Guid id)
+    public async Task<Order?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return _dbContext.Orders
+        return await _dbContext.Orders
             .Include(o => o.Items)
-            .FirstOrDefault(o => o.Id == id);
+            .FirstOrDefaultAsync(o => o.Id == id, cancellationToken);
     }
 
-    public void SaveChanges()
+    public async Task SaveChangesAsync(CancellationToken cancellationToken)
     {
-        _dbContext.SaveChanges();
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

@@ -4,6 +4,6 @@ namespace OrderProcessingSystem.Application.Orders;
 public interface IOrderRepository
 {
     void Add(Order order);
-    Order? GetById(Guid id);
-    void SaveChanges();
+    Task<Order?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+    Task SaveChangesAsync(CancellationToken cancellationToken);
 }
