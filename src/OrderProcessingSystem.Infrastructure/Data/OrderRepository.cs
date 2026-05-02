@@ -24,6 +24,13 @@ public class OrderRepository : IOrderRepository
             .Include(o => o.Items)
             .FirstOrDefaultAsync(o => o.Id == id, cancellationToken);
     }
+    public async Task<IReadOnlyCollection<Order>> GetAllAsync(CancellationToken cancellationToken)
+    {
+        return await _dbContext.Orders
+            .Include(o => o.Items)
+            .OrderByDescending(o => o.CreatedAt)
+            .ToListAsync(cancellationToken);
+    }
 
     public async Task SaveChangesAsync(CancellationToken cancellationToken)
     {
