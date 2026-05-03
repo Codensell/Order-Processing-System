@@ -23,7 +23,25 @@ public class ExceptionHandlingMiddleware
         {
             await _next(context);
         }
-        catch(ArgumentException exception)
+        catch (FluentValidation.ValidationException exception)
+        {
+            context.Response.ContentType = "application/json";
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+
+            var response = new
+            {
+                errors = exception.Errors.Select(error => new
+                {
+                    field = error.PropertyName,
+                    message = error.ErrorMessage
+                })
+            };
+
+            var json = JsonSerializer.Serialize(response);
+
+            await context.Response.WriteAsync(json);
+        }
+        catch (ArgumentException exception)
         {
             await HandleExceptionAsync(
                 context,
@@ -31,7 +49,7 @@ public class ExceptionHandlingMiddleware
                 HttpStatusCode.BadRequest
             );
         }
-        catch(InvalidOperationException exception)
+        catch (InvalidOperationException exception)
         {
             await HandleExceptionAsync(
                 context,
@@ -39,7 +57,7 @@ public class ExceptionHandlingMiddleware
                 HttpStatusCode.BadRequest
             );
         }
-        catch(Exception exception)
+        catch (Exception exception)
         {
             _logger.LogError(exception, "Unhandled exception occured");
 

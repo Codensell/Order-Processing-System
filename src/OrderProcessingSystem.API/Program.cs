@@ -5,6 +5,8 @@ using OrderProcessingSystem.Application.Orders;
 using OrderProcessingSystem.Application.Orders.GetOrderById;
 using OrderProcessingSystem.Application.Orders.GetOrders;
 using OrderProcessingSystem.API.Middleware;
+using FluentValidation;
+using OrderProcessingSystem.Application.Orders.CreateOrder.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +18,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IGetOrderByIdService, GetOrderByIdService>();
 builder.Services.AddScoped<IGetOrdersService, GetOrdersService>();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateOrderRequestValidator>();
 
 var app = builder.Build();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
