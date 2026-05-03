@@ -14,19 +14,24 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-builder.Services.AddScoped<ICreateOrderService, CreateOrderService>();
+builder.Services.Configure<KafkaOptions>(
+    builder.Configuration.GetSection("Kafka"));
+
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql("Host=localhost;Port=5432;Database=orders_db;Username=postgres;Password=postgres"));
-builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Postgres")));
+
+builder.Services.AddValidatorsFromAssemblyContaining<CreateOrderRequestValidator>();
+
+builder.Services.AddScoped<ICreateOrderService, CreateOrderService>();
 builder.Services.AddScoped<IGetOrderByIdService, GetOrderByIdService>();
 builder.Services.AddScoped<IGetOrdersService, GetOrdersService>();
-builder.Services.AddValidatorsFromAssemblyContaining<CreateOrderRequestValidator>();
+
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddSingleton<IOrderEventPublisher, KafkaOrderEventPublisher>();
 
 var app = builder.Build();
-app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-app.UseHttpsRedirection();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.MapControllers();
 
