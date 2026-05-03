@@ -4,6 +4,7 @@ using OrderProcessingSystem.Infrastructure.Data;
 using OrderProcessingSystem.Application.Orders;
 using OrderProcessingSystem.Application.Orders.GetOrderById;
 using OrderProcessingSystem.Application.Orders.GetOrders;
+using OrderProcessingSystem.API.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,7 @@ builder.Services.AddScoped<IGetOrderByIdService, GetOrderByIdService>();
 builder.Services.AddScoped<IGetOrdersService, GetOrdersService>();
 
 var app = builder.Build();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 

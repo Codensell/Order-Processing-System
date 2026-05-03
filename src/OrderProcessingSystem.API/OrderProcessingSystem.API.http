@@ -1,6 +1,23 @@
 @OrderProcessingSystem.API_HostAddress = http://localhost:5260
 
-GET {{OrderProcessingSystem.API_HostAddress}}/weatherforecast/
+### Create order
+POST {{OrderProcessingSystem.API_HostAddress}}/api/orders
+Content-Type: application/json
+
+{
+  "items": [
+    {
+      "productName": "Keyboard",
+      "price": 100,
+      "quantity": 1
+    }
+  ]
+}
+
+### Get all orders
+GET {{OrderProcessingSystem.API_HostAddress}}/api/orders
 Accept: application/json
 
-###
+### Get order by id
+GET {{OrderProcessingSystem.API_HostAddress}}/api/orders/5477f8e4-47ed-486a-a875-aa4b15409acf
+Accept: application/json
