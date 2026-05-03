@@ -1,6 +1,8 @@
 #!/bin/bash
 
-curl -X POST http://localhost:5260/api/orders \
+API_URL="http://localhost:5260"
+
+curl -X POST "$API_URL/api/orders" \
   -H "Content-Type: application/json" \
   -d '{
     "items": [
