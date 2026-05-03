@@ -7,6 +7,8 @@ using OrderProcessingSystem.Application.Orders.GetOrders;
 using OrderProcessingSystem.API.Middleware;
 using FluentValidation;
 using OrderProcessingSystem.Application.Orders.CreateOrder.Validators;
+using OrderProcessingSystem.Application.Orders.Events;
+using OrderProcessingSystem.Infrastructure.Messaging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +21,7 @@ builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IGetOrderByIdService, GetOrderByIdService>();
 builder.Services.AddScoped<IGetOrdersService, GetOrdersService>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateOrderRequestValidator>();
+builder.Services.AddSingleton<IOrderEventPublisher, KafkaOrderEventPublisher>();
 
 var app = builder.Build();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
